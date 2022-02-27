@@ -1,8 +1,8 @@
 # Quest of Pythagoras
 
-This game was created using [Python 3](https://www.python.org/).
+This game was created using [Python 3](https://www.python.org/) and [Pygame](https://www.pygame.org/).
 
-Is a simple game where the player play against the computer.
+Is a simple game where the player plays against the computer.
 
 The purpose of this project is show the basic concepts of Python language and Pygame library.
 
