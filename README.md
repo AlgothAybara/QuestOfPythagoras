@@ -11,6 +11,7 @@ The purpose of this project is show the basic concepts of Python language and Py
 You can install the project using the following command:
 
 > pip install pipenv
+>
 > pipenv install
 
 You can run the game using the following command:
@@ -26,6 +27,7 @@ Python - [Python 3.7.3](https://www.python.org/downloads/)
 # Useful Websites
 
 * [Python documentation](https://docs.python.org/3/tutorial/)
+* [Pygame documentation](https://www.pygame.org/docs/)
 
 # Future Work
 
