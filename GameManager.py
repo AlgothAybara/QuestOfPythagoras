@@ -26,6 +26,7 @@ TILE_TYPES = 21
 level = 1
 screen_scroll = 0
 bg_scroll = 0
+game_over = False
 
 #define player action variables
 moving_left = False
@@ -39,6 +40,7 @@ moving_up_g = False
 moving_down_g = True
 
 #load images for background
+game_over_img = pygame.image.load('assets/img/background/32847539f3d1e018a00145a3848f67e8.jpeg').convert_alpha()
 mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-Turkey.jpeg').convert_alpha()
 #store tiles in a list
 img_list = []
@@ -55,6 +57,8 @@ def draw_bg():
     width = mountain_img.get_width()
     for x in range(5):
         screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 0))
+        if game_over:
+            screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
 #close draw_bg function
 
 class World():
@@ -144,7 +148,7 @@ run = True
 while run:
     #if player is dead, end game
     if not player.alive:
-        run = False
+        game_over = True
     clock.tick(FPS)
     
     #draw background
