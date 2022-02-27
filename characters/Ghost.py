@@ -86,7 +86,7 @@ class Ghost(pygame.sprite.Sprite):
         self.rect.x += dx
         self.rect.y += dy
     #close move function
-    def ai(self, player, TILE_SIZE, GRAVITY, world):
+    def ai(self, player, TILE_SIZE, GRAVITY, world, screen_scroll):
         if self.alive and player.alive:
             if self.idling == False and random.randint(1, 200) == 1:
                 self.updateAction(0)#0: idle
@@ -117,6 +117,8 @@ class Ghost(pygame.sprite.Sprite):
                     self.idling_counter -= 1
                     if self.idling_counter <= 0:
                         self.idling = False
+        #scroll
+        self.rect.x += screen_scroll
 
     def updateAnimation(self):
         #update animation

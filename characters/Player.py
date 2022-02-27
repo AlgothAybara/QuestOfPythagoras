@@ -31,8 +31,9 @@ class Player(pygame.sprite.Sprite):
         self.height = self.image.get_height()
     #close __init__ constructor
 
-    def move(self, moving_left, moving_right, GRAVITY, world):
+    def move(self, moving_left, moving_right, GRAVITY, world, SCREEN_WIDTH, SCROLL_THRESH, bg_scroll, TILE_SIZE, SCREEN_HEIGHT):
         #reset movement variables
+        screen_scroll = 0
         dx = 0
         dy = 0
 
@@ -75,10 +76,24 @@ class Player(pygame.sprite.Sprite):
                     self.in_air = False
                     dy = tile[1].top - self.rect.bottom
 
-
+         #check if going off the edges of the screen
+        if self.char_type == 'heroine':
+            if self.rect.left + dx < 0 or self.rect.right + dx > SCREEN_WIDTH:
+                dx = 0
         #update rectangle position
         self.rect.x += dx
         self.rect.y += dy
+        #update scroll based on player position
+        if self.char_type == 'heroine':
+            if (self.rect.right > SCREEN_WIDTH - SCROLL_THRESH and bg_scroll < (world.level_length * TILE_SIZE) - SCREEN_WIDTH)\
+                or (self.rect.left < SCROLL_THRESH and bg_scroll > abs(dx)):
+                self.rect.x -= dx
+                screen_scroll = -dx
+        #check if fallen off the map
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.alive = False
+
+        return screen_scroll
     #close move function
         
     def updateAnimation(self):
