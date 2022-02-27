@@ -1,4 +1,4 @@
-# Overview
+# Quest of Pythagoras
 
 This game was created using [Python 3](https://www.python.org/).
 
