@@ -2,6 +2,8 @@
 import pygame
 import os
 import csv
+from characters.Ghost import Ghost
+from characters.Player import Player
 pygame.init
 
 
@@ -15,6 +17,7 @@ pygame.display.set_caption("Quest of Pythagoras")
 clock = pygame.time.Clock()
 FPS = 60
 #define game variables
+GRAVITY = 0.75
 ROWS = 16
 COLS = 150
 TILE_SIZE = SCREEN_HEIGHT // ROWS
@@ -24,6 +27,13 @@ level = 1
 #define player action variables
 moving_left = False
 moving_right = False
+moving_up = False
+moving_down = False
+#define ghost action variables
+moving_left_g = False
+moving_right_g = False
+moving_up_g = False
+moving_down_g = True
 
 #store tiles in a list
 img_list = []
@@ -62,7 +72,13 @@ class World():
                         decoration = Decoration(img, x * TILE_SIZE, y * TILE_SIZE)
                         decoration_group.add(decoration)
                     elif tile == 15:#create player
-                        player = Player("heroine",200,200,100,5)
+                        player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
+                    elif tile == 16:#create enemies
+
+                        enemy = Ghost("ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
+                        # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
+                        enemy_group.add(enemy)
+
 
         return player
 
@@ -86,77 +102,12 @@ class Water(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, char_type, x, y, scale, speed):
-        pygame.sprite.Sprite.__init__(self)
-        self.char_type = char_type
-        self.speed = speed
-        self.direction = 1
-        self.flip = False
-        self.frame_index = 0
-        self.anim_index = 0
-        self.FORCEUPDATE = False
-        self.update_time = pygame.time.get_ticks()
-        self.animation_types = ["idle", "walk", "jump", "attack"]
-        self.animation_list = [[] for i in range(len(self.animation_types))]
-
-        for i in range(len(self.animation_types)):
-            for j in range(2):
-                img = pygame.image.load(f'assets/sprites/{self.char_type}/{self.animation_types[i]}/{j}.png')
-                img = pygame.transform.scale(img, (scale,scale))
-                self.animation_list[i].append(img)
-        self.image = self.animation_list[self.anim_index][self.frame_index]
-        self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-    #close __init__ constructor
-
-    def move(self, moving_left, moving_right):
-        # reset movement vars
-        dx = 0
-        dy = 0
-
-        #assign movement variables if moving L or R
-        if moving_left:
-            dx = -self.speed
-            self.direction = -1
-            self.flip = True
-        if moving_right:
-            dx = self.speed
-            self.direction = 1
-            self.flip = False
-        if moving_left or moving_right:
-            self.anim_index = 1
-            
-
-        #update rect position
-        self.rect.x += dx
-        self.rect.y += dy
-    #close move function
-        
-    def updateAnimation(self):
-        #update cooldown
-        ANIMATION_COOLDOWN = 250
-        #updates image
-        self.image = self.animation_list[self.anim_index][self.frame_index]
-
-        #check if time passed
-        if pygame.time.get_ticks() -  self.update_time > ANIMATION_COOLDOWN or self.FORCEUPDATE:
-            self.update_time = pygame.time.get_ticks()
-            self.frame_index += 1
-            self.FORCEUPDATE = False
-        # reset index
-        if (self.frame_index == len(self.animation_list[self.anim_index])):
-            self.frame_index = 0
-    #close updateAnimation function
-
-    def draw(self):
-        screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
-    #close draw function
 
 #create sprite groups
 item_box_group = pygame.sprite.Group()
 decoration_group = pygame.sprite.Group()
 water_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 decoration_group.draw(screen)
 
 
@@ -176,10 +127,12 @@ world = World()
 player = world.process_data(world_data)
 
 
+
 run = True
 while run:
 
     clock.tick(FPS)
+    
     #draw background
     draw_bg()
     #draw world map
@@ -189,10 +142,25 @@ while run:
     item_box_group.update()
     decoration_group.update()
     water_group.update()
+    for enemy in enemy_group:
+        enemy.ai(player, TILE_SIZE, GRAVITY, world)
+        enemy.update()
+        enemy.draw(screen)
     player.updateAnimation()
-    player.draw()
+    player.draw(screen)
 
-    player.move(moving_left,moving_right)
+    player.move(moving_left,moving_right, GRAVITY, world)
+
+    if player.alive:
+        #player attacking
+        #throw grenades
+        if player.in_air:
+            player.updateAction(2)#2: jump
+        elif moving_left or moving_right:
+            player.updateAction(1)#1: run
+        else:
+            player.updateAction(0)#0: idle
+        player.move(moving_left, moving_right, GRAVITY, world)
 
 
     for event in pygame.event.get():
@@ -203,10 +171,12 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 moving_left = True
-                player.FORCEUPDATE = True
             if event.key == pygame.K_d:
                 moving_right = True
-                player.FORCEUPDATE = True
+            if event.key == pygame.K_w:
+                moving_up = True
+            if event.key == pygame.K_s:
+                moving_down = True
             if event.key == pygame.K_ESCAPE:
                 run == False
 
@@ -218,7 +188,15 @@ while run:
             if event.key == pygame.K_d:
                 moving_right = False
                 player.anim_index = 0
-
+            if event.key == pygame.K_w:
+                moving_up = False
+                player.anim_index = 0
+            if event.key == pygame.K_s:
+                moving_down = False
+                player.anim_index = 0
+        #Detect collisions for combat
+        # if player.rect.collidepoint(ghost.rect.center):
+        #     run = False
     
     pygame.display.update()
 #end while loop
