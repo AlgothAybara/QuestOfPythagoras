@@ -86,8 +86,8 @@ class Ghost(pygame.sprite.Sprite):
         self.rect.x += dx
         self.rect.y += dy
     #close move function
-    def ai(self, player, TILE_SIZE, GRAVITY, world, screen_scroll):
-        if self.alive and player.alive:
+    def ai(self, player, TILE_SIZE, GRAVITY, world, screen_scroll, paused, pause_and_test):
+        if self.alive and player.alive and not paused:
             if self.idling == False and random.randint(1, 200) == 1:
                 self.updateAction(0)#0: idle
                 self.idling = True
@@ -97,6 +97,7 @@ class Ghost(pygame.sprite.Sprite):
                 #stop running and face the player
                 self.updateAction(0)#0: idle
                 #Math Test
+                pause_and_test()
             else:
                 if self.idling == False:
                     if self.direction == 1:
