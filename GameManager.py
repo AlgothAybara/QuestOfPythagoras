@@ -1,10 +1,13 @@
 # from matplotlib import animation
+from matplotlib.pyplot import pause
 import pygame
 import os
+import random
 import csv
 from characters.Ghost import Ghost
 from characters.Player import Player
-pygame.init
+
+pygame.init()
 
 
 SCREEN_WIDTH = 1000
@@ -27,6 +30,10 @@ level = 1
 screen_scroll = 0
 bg_scroll = 0
 game_over = False
+paused = False
+option_one = False
+option_two = False
+option_three = False
 
 #define player action variables
 moving_left = False
@@ -42,6 +49,8 @@ moving_down_g = True
 #load images for background
 game_over_img = pygame.image.load('assets/img/background/32847539f3d1e018a00145a3848f67e8.jpeg').convert_alpha()
 mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-Turkey.jpeg').convert_alpha()
+message_img = pygame.image.load('assets/img/background/paper-dialog.png').convert_alpha()
+wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
 #store tiles in a list
 img_list = []
 for x in range(TILE_TYPES):
@@ -52,14 +61,68 @@ for x in range(TILE_TYPES):
 #define colors
 BG = (144,201,120)
 
+#promp iteraction with player
+test = False
+test_index = 0
+font = pygame.font.SysFont('Times New Roman', 50)
+test_array = [
+    ['2', 'How much is two plus two?', '1. TWO', '2. FOUR', '3. FIVE'],
+    ['3', 'How much is two times four?', '1. TWO', '2. FOUR', '3. EIGHT'],
+    ['1', 'How much is ten plus two?', '1. TWELVE', '2. SIXTEEN', '3. FIVE'],
+    ['2', 'How much is two plus five?', '1. TWO', '2. SEVEN', '3. FIVE'],
+ ]
+
+def toggle_pause_and_test():
+    global paused
+    global test
+    paused = not paused
+    test = not test
+
+def draw_test(test_array):
+    global test_index
+    test_message = test_array[test_index]
+
+    text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
+    screen.blit(message_img, (0, 0))
+    for i in range(len(text_renders)):
+        if i != 0:
+            screen.blit(text_renders[i], (SCREEN_WIDTH // 2 - text_renders[i].get_width() // 2, SCREEN_HEIGHT // 10 - text_renders[i].get_height() // 2 + i * text_renders[i].get_height()))
+    # test 
+    if option_one:
+        toggle_pause_and_test()
+        if test_message[0] == '1':
+            #congratulation message
+            print('congratulation')
+        else:
+            #wrong message
+            print('wrong')
+        test_index  = random.randint(0, len(test_array) - 1)
+    if option_two:
+        toggle_pause_and_test()
+        if test_message[0] == '2':
+            #congratulation message
+            print('congratulation')
+        else: 
+            #wrong message
+            print('wrong')
+            test_index  = random.randint(0, len(test_array) - 1)
+    if option_three:
+        toggle_pause_and_test()
+        if test_message[0] == '3':
+            #congratulation message
+            print('congratulation')
+        else:
+            #wrong message
+            print('wrong')
+        test_index  = random.randint(0, len(test_array) - 1)
+
+# draw the game over screen
 def draw_bg():
     screen.fill(BG)
     width = mountain_img.get_width()
     for x in range(5):
         screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 0))
-        if game_over:
-            screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
-#close draw_bg function
+        #close draw_bg function
 
 class World():
     def __init__(self):
@@ -161,7 +224,7 @@ while run:
     decoration_group.update()
     water_group.update()
     for enemy in enemy_group:
-        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll)
+        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll, paused, toggle_pause_and_test)
         enemy.update()
         enemy.draw(screen)
     player.updateAnimation()
@@ -187,19 +250,32 @@ while run:
             run = False 
         #keyboard presses
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
+
+            if event.key == pygame.K_1:
+                option_one = True
+            if event.key == pygame.K_2:
+                option_two = True
+            if event.key == pygame.K_3:
+                option_three = True
+            if event.key == pygame.K_a and not paused:
                 moving_left = True
-            if event.key == pygame.K_d:
+            if event.key == pygame.K_d and not paused:
                 moving_right = True
-            if event.key == pygame.K_w:
+            if event.key == pygame.K_w and not paused:
                 moving_up = True
-            if event.key == pygame.K_w and player.alive:
+            if event.key == pygame.K_w and player.alive and not paused:
                 player.jump = True
             if event.key == pygame.K_ESCAPE:
                 run == False
 
         #keyboard button released
         if event.type == pygame.KEYUP:
+            if event.key == pygame.K_1:
+                option_one = False
+            if event.key == pygame.K_2:
+                option_two = False
+            if event.key == pygame.K_3:
+                option_three = False
             if event.key == pygame.K_a:
                 moving_left = False
                 player.anim_index = 0
@@ -215,7 +291,12 @@ while run:
         #Detect collisions for combat
         # if player.rect.collidepoint(ghost.rect.center):
         #     run = False
-    
+    # interaction with items
+    if test:
+        draw_test(test_array)
+    if game_over:
+            screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
+
     pygame.display.update()
 #end while loop
     
