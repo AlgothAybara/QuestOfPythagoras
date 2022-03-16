@@ -9,6 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = 1
         self.flip = False
         self.jump = False
+        self.attack = False
         self.in_air = True
         self.vel_y = 0
         self.frame_index = 0

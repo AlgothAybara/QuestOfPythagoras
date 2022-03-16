@@ -80,6 +80,8 @@ def toggle_pause_and_test():
 
 def draw_test(test_array):
     global test_index
+    variable = False
+    #test_index = random.randint(0, len(test_array) - 1)
     test_message = test_array[test_index]
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
@@ -93,28 +95,42 @@ def draw_test(test_array):
         if test_message[0] == '1':
             #congratulation message
             print('congratulation')
+            variable = True
+            return variable
         else:
             #wrong message
             print('wrong')
-        test_index  = random.randint(0, len(test_array) - 1)
+            variable = False
+            test_index  = random.randint(0, len(test_array) - 1)
+            return variable 
     if option_two:
         toggle_pause_and_test()
         if test_message[0] == '2':
             #congratulation message
             print('congratulation')
+            variable = True
+            return variable
         else: 
             #wrong message
             print('wrong')
+            variable = False
             test_index  = random.randint(0, len(test_array) - 1)
+            return variable
+        
     if option_three:
         toggle_pause_and_test()
         if test_message[0] == '3':
-            #congratulation message
+        #congratulation message
             print('congratulation')
+            variable = True
+            return variable
         else:
-            #wrong message
+        #wrong message
             print('wrong')
-        test_index  = random.randint(0, len(test_array) - 1)
+            variable = False
+            test_index  = random.randint(0, len(test_array) - 1)
+            return variable 
+ 
 
 # draw the game over screen
 def draw_bg():
@@ -227,6 +243,15 @@ while run:
         enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll, paused, toggle_pause_and_test)
         enemy.update()
         enemy.draw(screen)
+        if player.rect.collidepoint(enemy.rect.center):
+                if draw_test(test_array):
+                    enemy_group.remove(enemy)  
+                    toggle_pause_and_test()
+
+
+           
+
+                    
     player.updateAnimation()
     player.draw(screen)
 
@@ -238,8 +263,11 @@ while run:
             player.updateAction(2)#2: jump
         elif moving_left or moving_right:
             player.updateAction(1)#1: run
+        elif player.attack:
+            player.updateAction(3)
         else:
             player.updateAction(0)#0: idle
+
         player.move(moving_left, moving_right, GRAVITY, world, SCREEN_WIDTH, SCROLL_THRESH, bg_scroll, TILE_SIZE, SCREEN_HEIGHT)
         screen_scroll = player.move(moving_left, moving_right, GRAVITY, world, SCREEN_WIDTH, SCROLL_THRESH, bg_scroll, TILE_SIZE, SCREEN_HEIGHT)
         bg_scroll -= screen_scroll
@@ -265,6 +293,8 @@ while run:
                 moving_up = True
             if event.key == pygame.K_w and player.alive and not paused:
                 player.jump = True
+            if event.key == pygame.K_SPACE:
+                player.attack = True
             if event.key == pygame.K_ESCAPE:
                 run == False
 
@@ -288,12 +318,15 @@ while run:
             if event.key == pygame.K_s:
                 moving_down = False
                 player.anim_index = 0
+            if event.key == pygame.K_SPACE:
+                player.attack = False
+                player.anim_index = 0 
         #Detect collisions for combat
         # if player.rect.collidepoint(ghost.rect.center):
         #     run = False
     # interaction with items
-    if test:
-        draw_test(test_array)
+    #if test:
+        #draw_test(test_array)
     if game_over:
             screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
 

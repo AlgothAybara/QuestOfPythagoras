@@ -97,7 +97,7 @@ class Ghost(pygame.sprite.Sprite):
                 #stop running and face the player
                 self.updateAction(0)#0: idle
                 #Math Test
-                pause_and_test()
+                #pause_and_test()
             else:
                 if self.idling == False:
                     if self.direction == 1:
