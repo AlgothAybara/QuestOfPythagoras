@@ -101,7 +101,6 @@ def draw_test(test_array):
             #wrong message
             print('wrong')
             variable = False
-            #
             player.alive = False
             return variable 
     if option_two:
@@ -116,7 +115,6 @@ def draw_test(test_array):
             #wrong message
             print('wrong')
             variable = False
-            #test_index  = random.randint(0, len(test_array) - 1)
             player.alive = False
             return variable
         
@@ -132,7 +130,6 @@ def draw_test(test_array):
         #wrong message
             print('wrong')
             variable = False
-            #test_index  = random.randint(0, len(test_array) - 1)
             player.alive = False
             return variable 
     
