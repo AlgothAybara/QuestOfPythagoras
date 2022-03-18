@@ -81,7 +81,6 @@ def toggle_pause_and_test():
 def draw_test(test_array):
     global test_index
     variable = False
-    #test_index = random.randint(0, len(test_array) - 1)
     test_message = test_array[test_index]
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
@@ -93,6 +92,7 @@ def draw_test(test_array):
     if option_one:
         toggle_pause_and_test()
         if test_message[0] == '1':
+            test_index  = random.randint(0, len(test_array) - 1)
             #congratulation message
             print('congratulation')
             variable = True
@@ -101,11 +101,13 @@ def draw_test(test_array):
             #wrong message
             print('wrong')
             variable = False
-            test_index  = random.randint(0, len(test_array) - 1)
+            #
+            player.alive = False
             return variable 
     if option_two:
         toggle_pause_and_test()
         if test_message[0] == '2':
+            test_index  = random.randint(0, len(test_array) - 1)
             #congratulation message
             print('congratulation')
             variable = True
@@ -114,12 +116,14 @@ def draw_test(test_array):
             #wrong message
             print('wrong')
             variable = False
-            test_index  = random.randint(0, len(test_array) - 1)
+            #test_index  = random.randint(0, len(test_array) - 1)
+            player.alive = False
             return variable
         
     if option_three:
         toggle_pause_and_test()
         if test_message[0] == '3':
+            test_index  = random.randint(0, len(test_array) - 1)
         #congratulation message
             print('congratulation')
             variable = True
@@ -128,8 +132,10 @@ def draw_test(test_array):
         #wrong message
             print('wrong')
             variable = False
-            test_index  = random.randint(0, len(test_array) - 1)
+            #test_index  = random.randint(0, len(test_array) - 1)
+            player.alive = False
             return variable 
+    
  
 
 # draw the game over screen
@@ -264,7 +270,7 @@ while run:
         elif moving_left or moving_right:
             player.updateAction(1)#1: run
         elif player.attack:
-            player.updateAction(3)
+            player.updateAction(3)#3: fight
         else:
             player.updateAction(0)#0: idle
 
