@@ -99,7 +99,7 @@ class Player(pygame.sprite.Sprite):
         
     def updateAnimation(self):
         #update animation
-        ANIMATION_COOLDOWN = 100
+        ANIMATION_COOLDOWN = 200
         #update image depending on current frame
         self.image = self.animation_list[self.action][self.frame_index]
         #check if enough time has passed since the last update
