@@ -53,12 +53,12 @@ message_img = pygame.image.load('assets/img/background/paper-dialog.png').conver
 wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
 
 # load sounds
-attack_sound = pygame.mixer.Sound("assets/audio/EFFECT_Attack.wav")
-missed_sound = pygame.mixer.Sound("assets/audio/EFFECT_Missed.wav")
+#attack_sound = pygame.mixer.Sound("assets/audio/EFFECT_Attack.wav")
+#missed_sound = pygame.mixer.Sound("assets/audio/EFFECT_Missed.wav")
 
 # set sound levels
-attack_sound.set_volume(0.5)
-missed_sound.set_volume(0.5)
+#attack_sound.set_volume(0.5)
+#missed_sound.set_volume(0.5)
 
 #store tiles in a list
 img_list = []
@@ -74,18 +74,79 @@ BG = (144,201,120)
 test = False
 test_index = 0
 font = pygame.font.SysFont('Times New Roman', 50)
-test_array = [
-    ['2', 'How much is two plus two?', '1. TWO', '2. FOUR', '3. FIVE'],
-    ['3', 'How much is two times four?', '1. TWO', '2. FOUR', '3. EIGHT'],
-    ['1', 'How much is ten plus two?', '1. TWELVE', '2. SIXTEEN', '3. FIVE'],
-    ['2', 'How much is two plus five?', '1. TWO', '2. SEVEN', '3. FIVE'],
- ]
+def createTestArray():
+    numbersArray = []
+    for x in range(20):
+        f = random.randint(1,3)
+        g = random.randint(1,12)
+        h = random.randint(1,12)
+        i = random.randint(2,3)
+        if x < 2:
+            if f == 1:
+                answer1 = f'1. {g + h}'
+                answer2 = f'2. {g - h}'
+                answer3 = f'3. {h * g}'
+            elif f == 2: 
+                answer1 = f'1. {g - h}'
+                answer2 = f'2. {g + h}'
+                answer3 = f'3. {h * g}'
+            elif f == 3: 
+                answer1 = f'1. {g - h}'
+                answer2 = f'2. {g * h}'
+                answer3 = f'3. {h + g}'
+            numbersArray.append([f'{f}', f'What is {g} + {h}?', answer1, answer2, answer3])
+        elif x < 4:
+            if f == 1:
+                answer1 = f'1. {g - h}'
+                answer2 = f'2. {g + h}'
+                answer3 = f'3. {h * g}'
+            elif f == 2: 
+                answer1 = f'1. {g + h}'
+                answer2 = f'2. {g - h}'
+                answer3 = f'3. {h * g}'
+            elif f == 3: 
+                answer1 = f'1. {g + h}'
+                answer2 = f'2. {g * h}'
+                answer3 = f'3. {g - h}'
+            numbersArray.append([f'{f}', f'What is {g} - {h}?', answer1, answer2, answer3])
+        elif x < 6:
+            if f == 1:
+                answer1 = f'1. {g * h}'
+                answer2 = f'2. {g * (h+1)}'
+                answer3 = f'3. {h * (g+1)}'
+            elif f == 2: 
+                answer1 = f'1. {g * (h+1)}'
+                answer2 = f'2. {g * h}'
+                answer3 = f'3. {h * (g+1)}'
+            elif f == 3: 
+                answer1 = f'1. {(g+1) * h}'
+                answer2 = f'2. {g * (h+1)}'
+                answer3 = f'3. {h * g}'
+            numbersArray.append([f'{f}', f'What is {g} x {h}?', answer1, answer2, answer3])
+        elif x < 20:
+            if f == 1:
+                answer1 = f'1. {g}'
+                answer2 = f'2. {g + i}'
+                answer3 = f'3. {g*i -i}'
+            elif f == 2: 
+                answer1 = f'1. {g - h}'
+                answer2 = f'2. {g}'
+                answer3 = f'3. {h * g}'
+            elif f == 3: 
+                answer1 = f'1. {g - h}'
+                answer2 = f'2. {g * h}'
+                answer3 = f'3. {g}'
+            numbersArray.append([f'{f}', f'What is {g*i} / {i}?', answer1, answer2, answer3])
+    return numbersArray
+
+test_array = createTestArray()
 
 def toggle_pause_and_test():
     global paused
     global test
     paused = not paused
     test = not test
+
 
 def draw_test(test_array):
     global test_index
@@ -101,11 +162,11 @@ def draw_test(test_array):
     if option_one:
         toggle_pause_and_test()
         if test_message[0] == '1':
-            test_index  = random.randint(0, len(test_array) - 1)
+            test_index  += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            #pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
@@ -113,33 +174,33 @@ def draw_test(test_array):
             print('wrong')
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
+            #pygame.mixer.Sound.play(missed_sound)
             return variable 
     if option_two:
         toggle_pause_and_test()
         if test_message[0] == '2':
-            test_index  = random.randint(0, len(test_array) - 1)
+            test_index  += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            #pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else: 
             #wrong message
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
+            #pygame.mixer.Sound.play(missed_sound)
             return variable
         
     if option_three:
         toggle_pause_and_test()
         if test_message[0] == '3':
-            test_index  = random.randint(0, len(test_array) - 1)
+            test_index  += 1
         #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            #pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
@@ -147,10 +208,10 @@ def draw_test(test_array):
             print('wrong')
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
+            #pygame.mixer.Sound.play(missed_sound)
             return variable 
     
- 
+
 
 # draw the game over screen
 def draw_bg():
