@@ -51,6 +51,15 @@ game_over_img = pygame.image.load('assets/img/background/32847539f3d1e018a00145a
 mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-Turkey.jpeg').convert_alpha()
 message_img = pygame.image.load('assets/img/background/paper-dialog.png').convert_alpha()
 wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
+
+# load sounds
+attack_sound = pygame.mixer.Sound("assets/audio/EFFECT_Attack.wav")
+missed_sound = pygame.mixer.Sound("assets/audio/EFFECT_Missed.wav")
+
+# set sound levels
+attack_sound.set_volume(0.5)
+missed_sound.set_volume(0.5)
+
 #store tiles in a list
 img_list = []
 for x in range(TILE_TYPES):
@@ -95,6 +104,8 @@ def draw_test(test_array):
             test_index  = random.randint(0, len(test_array) - 1)
             #congratulation message
             print('congratulation')
+            player.updateAction(3)
+            pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
@@ -102,6 +113,7 @@ def draw_test(test_array):
             print('wrong')
             variable = False
             player.alive = False
+            pygame.mixer.Sound.play(missed_sound)
             return variable 
     if option_two:
         toggle_pause_and_test()
@@ -109,12 +121,15 @@ def draw_test(test_array):
             test_index  = random.randint(0, len(test_array) - 1)
             #congratulation message
             print('congratulation')
+            player.updateAction(3)
+            pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else: 
             #wrong message
             variable = False
             player.alive = False
+            pygame.mixer.Sound.play(missed_sound)
             return variable
         
     if option_three:
@@ -123,6 +138,8 @@ def draw_test(test_array):
             test_index  = random.randint(0, len(test_array) - 1)
         #congratulation message
             print('congratulation')
+            player.updateAction(3)
+            pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
@@ -130,6 +147,7 @@ def draw_test(test_array):
             print('wrong')
             variable = False
             player.alive = False
+            pygame.mixer.Sound.play(missed_sound)
             return variable 
     
  
