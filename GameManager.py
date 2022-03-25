@@ -113,7 +113,6 @@ def draw_test(test_array):
             return variable
         else: 
             #wrong message
-            print('wrong')
             variable = False
             player.alive = False
             return variable
