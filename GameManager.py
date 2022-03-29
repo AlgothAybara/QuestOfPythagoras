@@ -76,6 +76,7 @@ BG = (144,201,120)
 test = False
 test_index = 0
 font = pygame.font.SysFont('Times New Roman', 50)
+#Creates the questions and answers for the games play. 
 def createTestArray():
     numbersArray = []
     for x in range(20):
@@ -360,7 +361,7 @@ while run:
     for event in pygame.event.get():
         #quit game
         if event.type == pygame.QUIT:
-            run = False 
+            run = False             
         #keyboard presses
         if event.type == pygame.KEYDOWN:
 
