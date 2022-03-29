@@ -143,19 +143,20 @@ def createTestArray():
     return numbersArray
 
 test_array = createTestArray()
-
+""""
 def toggle_pause_and_test():
     global paused
     global test
     paused = not paused
-    test = not test
-
+    #test = not test
+"""
 
 def draw_test(test_array):
     global test_index
     variable = False
     test_message = test_array[test_index]
-    pygame.mixer.Sound.play(encounter_sound)
+    
+    #pygame.mixer.Sound.play(encounter_sound)
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
     screen.blit(message_img, (0, 0))
@@ -164,7 +165,7 @@ def draw_test(test_array):
             screen.blit(text_renders[i], (SCREEN_WIDTH // 2 - text_renders[i].get_width() // 2, SCREEN_HEIGHT // 10 - text_renders[i].get_height() // 2 + i * text_renders[i].get_height()))
     # test 
     if option_one:
-        toggle_pause_and_test()
+        #toggle_pause_and_test()
         if test_message[0] == '1':
             test_index  += 1
             #congratulation message
@@ -181,7 +182,7 @@ def draw_test(test_array):
             pygame.mixer.Sound.play(missed_sound)
             return variable 
     if option_two:
-        toggle_pause_and_test()
+        #toggle_pause_and_test()
         if test_message[0] == '2':
             test_index += 1
             #congratulation message
@@ -198,7 +199,7 @@ def draw_test(test_array):
             return variable
         
     if option_three:
-        toggle_pause_and_test()
+        #toggle_pause_and_test()
         if test_message[0] == '3':
             test_index  += 1
         #congratulation message
@@ -325,13 +326,21 @@ while run:
     decoration_group.update()
     water_group.update()
     for enemy in enemy_group:
-        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll, paused, toggle_pause_and_test)
+        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll)
         enemy.update()
         enemy.draw(screen)
+    
         if player.rect.collidepoint(enemy.rect.center):
-                if draw_test(test_array):
-                    enemy_group.remove(enemy)  
-                    toggle_pause_and_test()
+            if player.speed != 0:
+                pygame.mixer.Sound.play(encounter_sound)
+                old_Speed = player.speed 
+            player.speed = 0
+            player.jump = False
+            if draw_test(test_array):
+                enemy_group.remove(enemy)  
+                player.speed = old_Speed
+                
+                    #toggle_pause_and_test()
                     
 
 
@@ -371,13 +380,13 @@ while run:
                 option_two = True
             if event.key == pygame.K_3:
                 option_three = True
-            if event.key == pygame.K_a and player.alive and not paused:
+            if event.key == pygame.K_a and player.alive:# and not paused:
                 moving_left = True
-            if event.key == pygame.K_d and player.alive and not paused:
+            if event.key == pygame.K_d and player.alive:# and not paused:
                 moving_right = True
-            if event.key == pygame.K_w and player.alive and not paused:
+            if event.key == pygame.K_w and player.alive:# and not paused:
                 moving_up = True
-            if event.key == pygame.K_w and player.alive and not paused:
+            if event.key == pygame.K_w and player.alive:# and not paused:
                 player.jump = True
             if event.key == pygame.K_SPACE:
                 player.attack = True
@@ -406,13 +415,8 @@ while run:
                 player.anim_index = 0
             if event.key == pygame.K_SPACE:
                 player.attack = False
-                player.anim_index = 0 
-        #Detect collisions for combat
-        # if player.rect.collidepoint(ghost.rect.center):
-        #     run = False
-    # interaction with items
-    #if test:
-        #draw_test(test_array)
+                player.anim_index = 0
+
     if game_over:
             screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
 
