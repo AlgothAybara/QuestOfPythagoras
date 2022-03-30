@@ -240,18 +240,9 @@ class World():
                         enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
-<<<<<<< HEAD
-                    
-                    elif tile == 20:
-                        enemy = Ghost("Monster",x * TILE_SIZE, y * TILE_SIZE,110,1)
-                        # enemy = Monster('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
-                        enemy_group.add(enemy)
-
-=======
                     elif tile == 20:
                         enemy = Ghost("Monster",x * TILE_SIZE, y * TILE_SIZE,120,1)
                         enemy_group.add(enemy)
->>>>>>> 1bf261832d832de29a50db9a5116c299e6f4cd51
 
 
         return player
