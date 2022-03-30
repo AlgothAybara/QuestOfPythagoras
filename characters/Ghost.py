@@ -21,7 +21,7 @@ class Ghost(pygame.sprite.Sprite):
         self.animation_list = [[] for i in range(len(self.animation_types))]
 
         for i in range(len(self.animation_types)):
-            for j in range(6):
+            for j in range(5):
                 img = pygame.image.load(f'assets/sprites/{self.char_type}/{self.animation_types[i]}/{j}.png')
                 img = pygame.transform.scale(img, (scale,scale))
                 self.animation_list[i].append(img)
