@@ -149,7 +149,7 @@ def draw_test(test_array):
     test_message = test_array[test_index]
     
     #pygame.mixer.Sound.play(encounter_sound)
-    sm.play_effect(2)
+    # sm.play_effect(2)
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
     screen.blit(message_img, (0, 0))
@@ -335,6 +335,7 @@ while run:
         if player.rect.collidepoint(enemy.rect.center):
             if player.speed != 0:
                 # pygame.mixer.Sound.play(encounter_sound)
+                sm.play_effect(2)
                 old_Speed = player.speed 
             player.speed = 0
             player.jump = False
