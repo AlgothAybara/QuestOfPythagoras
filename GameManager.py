@@ -4,6 +4,7 @@ import pygame
 import os
 import random
 import csv
+import SoundManager as sm
 from characters.Ghost import Ghost
 from characters.Player import Player
 
@@ -52,15 +53,6 @@ mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-
 message_img = pygame.image.load('assets/img/background/paper-dialog.png').convert_alpha()
 wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
 
-# load sounds
-attack_sound = pygame.mixer.Sound("assets/audio/EFFECT_Attack.wav")
-missed_sound = pygame.mixer.Sound("assets/audio/EFFECT_Missed.wav")
-encounter_sound = pygame.mixer.Sound("assets/audio/EFFECT_Encounter.wav")
-
-# set sound levels
-attack_sound.set_volume(0.5)
-missed_sound.set_volume(0.5)
-encounter_sound.set_volume(0.5)
 
 #store tiles in a list
 img_list = []
@@ -171,13 +163,13 @@ def draw_test(test_array):
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            # pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
             #wrong message
-            if variable: 
-                pygame.mixer.Sound.play(missed_sound)
+            # if variable: 
+                # pygame.mixer.Sound.play(missed_sound)
             variable = False
             player.alive = False
             return variable 
@@ -188,13 +180,13 @@ def draw_test(test_array):
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            # pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else: 
             #wrong message
-            if variable:
-                pygame.mixer.Sound.play(missed_sound)
+            # if variable:
+                # pygame.mixer.Sound.play(missed_sound)
             variable = False
             player.alive = False  
             return variable
@@ -206,13 +198,13 @@ def draw_test(test_array):
         #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            # pygame.mixer.Sound.play(attack_sound)
             variable = True
             return variable
         else:
         #wrong message
-            if variable:
-                pygame.mixer.Sound.play(missed_sound)
+            # if variable:
+            # pygame.mixer.Sound.play(missed_sound)
             variable = False
             player.alive = False
             return variable 
@@ -226,6 +218,8 @@ def draw_bg():
     for x in range(5):
         screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 0))
         #close draw_bg function
+
+sm.play_theme(sm.theme_dungeon1_array)
 
 class World():
     def __init__(self):
@@ -333,7 +327,7 @@ while run:
     
         if player.rect.collidepoint(enemy.rect.center):
             if player.speed != 0:
-                pygame.mixer.Sound.play(encounter_sound)
+                # pygame.mixer.Sound.play(encounter_sound)
                 old_Speed = player.speed 
             player.speed = 0
             player.jump = False
@@ -421,6 +415,7 @@ while run:
     if game_over:
             screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
 
+    sm.theme_queue(sm.theme_dungeon1_array)
     pygame.display.update()
 #end while loop
     
