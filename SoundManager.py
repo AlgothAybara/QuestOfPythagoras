@@ -26,7 +26,6 @@ dungeon1_solo = "assets/audio/dungeon1/solo.wav"
 dungeon1_verse1 = "assets/audio/dungeon1/verse1.wav"
 dungeon1_verse2 = "assets/audio/dungeon1/verse2.wav"
 dungeon1_verse3 = "assets/audio/dungeon1/verse3.wav"
-dungeon1_silence = "assets/audio/dungeon1/silence.wav"
 
 
 theme_dungeon1_array = [
@@ -37,7 +36,6 @@ theme_dungeon1_array = [
     dungeon1_verse1,
     dungeon1_verse2,
     dungeon1_verse3,
-    dungeon1_silence,
 ]
 
 # plays sound effect in the effect array
@@ -57,21 +55,6 @@ def play_theme(theme):
     pygame.mixer.music.queue(theme[1])
     pygame.mixer.music.play()
 
-    
-    # while pygame.mixer.music.get_busy():
-    #     pygame.time.Clock().tick(10)
-
 def theme_queue(theme):
-    index = random.randint(0,len(theme)-1)
+    index = random.randint(0,len(theme)-2)    
     pygame.mixer.music.queue(theme[index])
-    # for event in pygame.event.get():
-    #     if event.type == SONG_END:
-    #         print("Na dog")
-    #         index = random.randint(0,len(theme)-1)
-    #         pygame.mixer.music.queue(theme[index])
-
-
-    
-
-
-
