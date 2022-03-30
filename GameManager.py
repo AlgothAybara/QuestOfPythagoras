@@ -5,6 +5,7 @@ import pygame
 import os
 import random
 import csv
+import SoundManager as sm
 from characters.Ghost import Ghost
 from characters.Player import Player
 from characters.Monster import Monster
@@ -36,7 +37,7 @@ paused = False
 option_one = False
 option_two = False
 option_three = False
-
+variable = True
 #define player action variables
 moving_left = False
 moving_right = False
@@ -54,15 +55,6 @@ mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-
 message_img = pygame.image.load('assets/img/background/paper-dialog.png').convert_alpha()
 wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
 
-# load sounds
-attack_sound = pygame.mixer.Sound("assets/audio/EFFECT_Attack.wav")
-missed_sound = pygame.mixer.Sound("assets/audio/EFFECT_Missed.wav")
-encounter_sound = pygame.mixer.Sound("assets/audio/EFFECT_Encounter.wav")
-
-# set sound levels
-attack_sound.set_volume(0.5)
-missed_sound.set_volume(0.5)
-encounter_sound.set_volume(0.5)
 
 #store tiles in a list
 img_list = []
@@ -146,18 +138,11 @@ def createTestArray():
 
 test_array = createTestArray()
 
-def toggle_pause_and_test():
-    global paused
-    global test
-    paused = not paused
-    test = not test
-
 
 def draw_test(test_array):
     global test_index
-    variable = False
+    global variable
     test_message = test_array[test_index]
-    pygame.mixer.Sound.play(encounter_sound)
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
     screen.blit(message_img, (0, 0))
@@ -166,55 +151,53 @@ def draw_test(test_array):
             screen.blit(text_renders[i], (SCREEN_WIDTH // 2 - text_renders[i].get_width() // 2, SCREEN_HEIGHT // 10 - text_renders[i].get_height() // 2 + i * text_renders[i].get_height()))
     # test 
     if option_one:
-        toggle_pause_and_test()
         if test_message[0] == '1':
             test_index  += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(0)
             variable = True
             return variable
         else:
             #wrong message
-            print('wrong')
+            if variable: 
+                sm.play_effect(1)
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
             return variable 
     if option_two:
-        toggle_pause_and_test()
         if test_message[0] == '2':
             test_index += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(0)
             variable = True
             return variable
         else: 
             #wrong message
+            if variable:
+                sm.play_effect(1)
             variable = False
-            player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
+            player.alive = False  
             return variable
         
     if option_three:
-        toggle_pause_and_test()
         if test_message[0] == '3':
             test_index  += 1
         #congratulation message
             print('congratulation')
             player.updateAction(3)
-            pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(0)
             variable = True
             return variable
         else:
         #wrong message
-            print('wrong')
+            if variable:
+                sm.play_effect(1)
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
             return variable 
     
 
@@ -226,6 +209,8 @@ def draw_bg():
     for x in range(5):
         screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 0))
         #close draw_bg function
+
+sm.play_theme(sm.theme_dungeon1_array)
 
 class World():
     def __init__(self):
@@ -254,7 +239,7 @@ class World():
                         player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
                     elif tile == 16:#create enemies
 
-                        enemy = Ghost("ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
+                        enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
                     elif tile == 20:
@@ -332,17 +317,19 @@ while run:
     decoration_group.update()
     water_group.update()
     for enemy in enemy_group:
-        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll, paused, toggle_pause_and_test)
+        enemy.ai(player, TILE_SIZE, GRAVITY, world, screen_scroll)
         enemy.update()
         enemy.draw(screen)
+    
         if player.rect.collidepoint(enemy.rect.center):
-                if draw_test(test_array):
-                    enemy_group.remove(enemy)  
-                    toggle_pause_and_test()
-                    
-
-
-           
+            if player.speed != 0:
+                sm.play_effect(2)
+                old_Speed = player.speed 
+            player.speed = 0
+            player.jump = False
+            if draw_test(test_array):
+                enemy_group.remove(enemy)  
+                player.speed = old_Speed          
 
                     
     player.updateAnimation()
@@ -378,13 +365,13 @@ while run:
                 option_two = True
             if event.key == pygame.K_3:
                 option_three = True
-            if event.key == pygame.K_a and player.alive and not paused:
+            if event.key == pygame.K_a and player.alive:# and not paused:
                 moving_left = True
-            if event.key == pygame.K_d and player.alive and not paused:
+            if event.key == pygame.K_d and player.alive:# and not paused:
                 moving_right = True
-            if event.key == pygame.K_w and player.alive and not paused:
+            if event.key == pygame.K_w and player.alive:# and not paused:
                 moving_up = True
-            if event.key == pygame.K_w and player.alive and not paused:
+            if event.key == pygame.K_w and player.alive:# and not paused:
                 player.jump = True
             if event.key == pygame.K_SPACE:
                 player.attack = True
@@ -413,16 +400,12 @@ while run:
                 player.anim_index = 0
             if event.key == pygame.K_SPACE:
                 player.attack = False
-                player.anim_index = 0 
-        #Detect collisions for combat
-        # if player.rect.collidepoint(ghost.rect.center):
-        #     run = False
-    # interaction with items
-    #if test:
-        #draw_test(test_array)
+                player.anim_index = 0
+
     if game_over:
             screen.blit(game_over_img, (SCREEN_WIDTH // 2 - game_over_img.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_img.get_height() // 2))
 
+    sm.theme_queue(sm.theme_dungeon1_array)
     pygame.display.update()
 #end while loop
     
