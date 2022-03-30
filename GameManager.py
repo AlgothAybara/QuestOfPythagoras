@@ -239,7 +239,7 @@ class World():
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
                     elif tile == 20:
-                        enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,120,1)
+                        enemy = Ghost("Monster",x * TILE_SIZE, y * TILE_SIZE,120,1)
                         enemy_group.add(enemy)
 
 
@@ -316,6 +316,7 @@ while run:
         enemy.draw(screen)
     
         if player.rect.collidepoint(enemy.rect.center):
+            enemy.speed = 0
             if player.speed != 0:
                 sm.play_effect(2)
                 old_Speed = player.speed 
