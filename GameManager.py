@@ -20,6 +20,7 @@ pygame.display.set_caption("Quest of Pythagoras")
 #set framerate
 clock = pygame.time.Clock()
 FPS = 60
+
 #define game variables
 SCROLL_THRESH = 200
 GRAVITY = 0.3
@@ -27,6 +28,7 @@ ROWS = 16
 COLS = 150
 TILE_SIZE = SCREEN_HEIGHT // ROWS
 TILE_TYPES = 21
+
 level = 1
 screen_scroll = 0
 bg_scroll = 0
@@ -136,7 +138,6 @@ def createTestArray():
 
 test_array = createTestArray()
 
-
 def draw_test(test_array):
     global test_index
     global variable
@@ -197,8 +198,6 @@ def draw_test(test_array):
             variable = False
             player.alive = False
             return variable 
-    
-
 
 # draw the game over screen
 def draw_bg():
@@ -235,8 +234,7 @@ class World():
                         decoration_group.add(decoration)
                     elif tile == 15:#create player
                         player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
-                    elif tile == 16:#create enemies
-
+                    elif tile == 16:#create ghost
                         enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
