@@ -34,7 +34,7 @@ paused = False
 option_one = False
 option_two = False
 option_three = False
-
+variable = True
 #define player action variables
 moving_left = False
 moving_right = False
@@ -153,7 +153,7 @@ def toggle_pause_and_test():
 
 def draw_test(test_array):
     global test_index
-    variable = False
+    global variable
     test_message = test_array[test_index]
     
     #pygame.mixer.Sound.play(encounter_sound)
@@ -176,10 +176,10 @@ def draw_test(test_array):
             return variable
         else:
             #wrong message
-            print('wrong')
+            if variable: 
+                pygame.mixer.Sound.play(missed_sound)
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
             return variable 
     if option_two:
         #toggle_pause_and_test()
@@ -193,9 +193,10 @@ def draw_test(test_array):
             return variable
         else: 
             #wrong message
+            if variable:
+                pygame.mixer.Sound.play(missed_sound)
             variable = False
-            player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
+            player.alive = False  
             return variable
         
     if option_three:
@@ -210,10 +211,10 @@ def draw_test(test_array):
             return variable
         else:
         #wrong message
-            print('wrong')
+            if variable:
+                pygame.mixer.Sound.play(missed_sound)
             variable = False
             player.alive = False
-            pygame.mixer.Sound.play(missed_sound)
             return variable 
     
 
@@ -253,7 +254,7 @@ class World():
                         player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
                     elif tile == 16:#create enemies
 
-                        enemy = Ghost("ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
+                        enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
 
