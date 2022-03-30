@@ -149,6 +149,7 @@ def draw_test(test_array):
     test_message = test_array[test_index]
     
     #pygame.mixer.Sound.play(encounter_sound)
+    sm.play_effect(2)
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
     screen.blit(message_img, (0, 0))
@@ -164,12 +165,14 @@ def draw_test(test_array):
             print('congratulation')
             player.updateAction(3)
             # pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(0)
             variable = True
             return variable
         else:
             #wrong message
-            # if variable: 
+            if variable: 
                 # pygame.mixer.Sound.play(missed_sound)
+                sm.play_effect(1)
             variable = False
             player.alive = False
             return variable 
@@ -181,12 +184,14 @@ def draw_test(test_array):
             print('congratulation')
             player.updateAction(3)
             # pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(1)
             variable = True
             return variable
         else: 
             #wrong message
-            # if variable:
+            if variable:
                 # pygame.mixer.Sound.play(missed_sound)
+                sm.play_effect(1)
             variable = False
             player.alive = False  
             return variable
@@ -199,12 +204,14 @@ def draw_test(test_array):
             print('congratulation')
             player.updateAction(3)
             # pygame.mixer.Sound.play(attack_sound)
+            sm.play_effect(0)
             variable = True
             return variable
         else:
         #wrong message
-            # if variable:
+            if variable:
             # pygame.mixer.Sound.play(missed_sound)
+                sm.play_effect(1)
             variable = False
             player.alive = False
             return variable 
