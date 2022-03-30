@@ -135,21 +135,12 @@ def createTestArray():
     return numbersArray
 
 test_array = createTestArray()
-""""
-def toggle_pause_and_test():
-    global paused
-    global test
-    paused = not paused
-    #test = not test
-"""
+
 
 def draw_test(test_array):
     global test_index
     global variable
     test_message = test_array[test_index]
-    
-    #pygame.mixer.Sound.play(encounter_sound)
-    # sm.play_effect(2)
 
     text_renders = [font.render(test, True, (0, 120, 255)) for test in test_message]
     screen.blit(message_img, (0, 0))
@@ -158,59 +149,50 @@ def draw_test(test_array):
             screen.blit(text_renders[i], (SCREEN_WIDTH // 2 - text_renders[i].get_width() // 2, SCREEN_HEIGHT // 10 - text_renders[i].get_height() // 2 + i * text_renders[i].get_height()))
     # test 
     if option_one:
-        #toggle_pause_and_test()
         if test_message[0] == '1':
             test_index  += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            # pygame.mixer.Sound.play(attack_sound)
             sm.play_effect(0)
             variable = True
             return variable
         else:
             #wrong message
             if variable: 
-                # pygame.mixer.Sound.play(missed_sound)
                 sm.play_effect(1)
             variable = False
             player.alive = False
             return variable 
     if option_two:
-        #toggle_pause_and_test()
         if test_message[0] == '2':
             test_index += 1
             #congratulation message
             print('congratulation')
             player.updateAction(3)
-            # pygame.mixer.Sound.play(attack_sound)
-            sm.play_effect(1)
+            sm.play_effect(0)
             variable = True
             return variable
         else: 
             #wrong message
             if variable:
-                # pygame.mixer.Sound.play(missed_sound)
                 sm.play_effect(1)
             variable = False
             player.alive = False  
             return variable
         
     if option_three:
-        #toggle_pause_and_test()
         if test_message[0] == '3':
             test_index  += 1
         #congratulation message
             print('congratulation')
             player.updateAction(3)
-            # pygame.mixer.Sound.play(attack_sound)
             sm.play_effect(0)
             variable = True
             return variable
         else:
         #wrong message
             if variable:
-            # pygame.mixer.Sound.play(missed_sound)
                 sm.play_effect(1)
             variable = False
             player.alive = False
@@ -334,20 +316,13 @@ while run:
     
         if player.rect.collidepoint(enemy.rect.center):
             if player.speed != 0:
-                # pygame.mixer.Sound.play(encounter_sound)
                 sm.play_effect(2)
                 old_Speed = player.speed 
             player.speed = 0
             player.jump = False
             if draw_test(test_array):
                 enemy_group.remove(enemy)  
-                player.speed = old_Speed
-                
-                    #toggle_pause_and_test()
-                    
-
-
-           
+                player.speed = old_Speed          
 
                     
     player.updateAnimation()

@@ -3,6 +3,7 @@ import random
 
 pygame.init()
 pygame.mixer.init()
+pygame.mixer.music.set_volume(0.5)
 
 SONG_END = pygame.USEREVENT + 1
 
@@ -15,7 +16,7 @@ effect_array = [attack_effect, missed_effect, encounter_effect]
 
 # set sound levels
 for effect in effect_array:
-    effect.set_volume(0.3)
+    effect.set_volume(0.4)
 
 # load Dungeon1 theme
 dungeon1_intro = "assets/audio/dungeon1/intro.wav"
