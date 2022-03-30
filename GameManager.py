@@ -1,4 +1,5 @@
 # from matplotlib import animation
+import imp
 from matplotlib.pyplot import pause
 import pygame
 import os
@@ -6,6 +7,7 @@ import random
 import csv
 from characters.Ghost import Ghost
 from characters.Player import Player
+from characters.Monster import Monster
 
 pygame.init()
 
@@ -255,6 +257,11 @@ class World():
                         enemy = Ghost("ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
                         # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
+                    elif tile == 20:
+                        enemy = Monster("monster",x * TILE_SIZE, y * TILE_SIZE,110,1)
+                        # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
+                        enemy_group.add(enemy)
+
 
 
         return player
