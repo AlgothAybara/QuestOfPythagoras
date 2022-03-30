@@ -17,7 +17,7 @@ class Ghost(pygame.sprite.Sprite):
         self.action = 0
         self.FORCEUPDATE = False
         self.update_time = pygame.time.get_ticks()
-        self.animation_types = ["idle"]
+        self.animation_types = ["idle", "walking"]
         self.animation_list = [[] for i in range(len(self.animation_types))]
 
         for i in range(len(self.animation_types)):
