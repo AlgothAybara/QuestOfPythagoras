@@ -22,8 +22,8 @@ You can run the game using the following command:
 
 # Development Environment
 
-Python - [Python 3.7.3](https://www.python.org/downloads/)
-Visual Studio Code - [VSC](https://code.visualstudio.com/)
+* Python - [Python 3.7.3](https://www.python.org/downloads/)
+* Visual Studio Code - [VSC](https://code.visualstudio.com/)
 
 # Useful Websites
 
