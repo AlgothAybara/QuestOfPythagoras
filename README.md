@@ -18,7 +18,7 @@ You can run the game using the following command:
 
 > pipenv run python3 GameManager.py
 
-[Software Demo Video]()
+[Software Demo Video](https://youtu.be/tG8qk9Ln6bk)
 
 # Development Environment
 
