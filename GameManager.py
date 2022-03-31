@@ -53,10 +53,14 @@ moving_down_g = True
 
 #load images for background
 game_over_img = pygame.image.load('assets/img/background/32847539f3d1e018a00145a3848f67e8.jpeg').convert_alpha()
-mountain_img = pygame.image.load('assets/img/background/Valley-Taurus-Mountains-Turkey.jpeg').convert_alpha()
 message_img = pygame.image.load('assets/img/background/paper-dialog.png').convert_alpha()
 wellDone_img = pygame.image.load('assets/img/background/well-done-despicable-me.gif').convert_alpha()
 
+#load images
+pine1_img = pygame.image.load('Assets/Background/pine1.png').convert_alpha()
+pine2_img = pygame.image.load('Assets/Background/pine2.png').convert_alpha()
+mountain_img = pygame.image.load('Assets/Background/mountain.png').convert_alpha()
+sky_img = pygame.image.load('Assets/Background/sky_cloud.png').convert_alpha()
 
 #store tiles in a list
 img_list = []
@@ -202,12 +206,15 @@ def draw_test(test_array):
             return variable 
 
 # draw the game over screen
+#create function for drawing background
 def draw_bg():
-    screen.fill(BG)
-    width = mountain_img.get_width()
-    for x in range(5):
-        screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 0))
-        #close draw_bg function
+	screen.fill(BG)
+	width = sky_img.get_width()
+	for x in range(4):
+		screen.blit(sky_img, ((x * width) - bg_scroll * 0.5, 0))
+		screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 300))
+		screen.blit(pine1_img, ((x * width) - bg_scroll * 0.7, SCREEN_HEIGHT - pine1_img.get_height() - 150))
+		screen.blit(pine2_img, ((x * width) - bg_scroll * 0.8, SCREEN_HEIGHT - pine2_img.get_height()))
 
 sm.play_theme(sm.theme_dungeon1_array)
 
