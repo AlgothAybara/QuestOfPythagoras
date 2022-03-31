@@ -131,7 +131,7 @@ def createTestArray():
                 answer3 = f'3. {h * g}'
             elif f == 3: 
                 answer1 = f'1. {g - h}'
-                answer2 = f'2. {g * h}'
+                answer2 = f'2. {g + h}'
                 answer3 = f'3. {g}'
             numbersArray.append([f'{f}', f'What is {g*i} / {i}?', answer1, answer2, answer3])
     return numbersArray
