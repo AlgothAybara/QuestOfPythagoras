@@ -34,6 +34,7 @@ TILE_TYPES = 21
 level = 1
 screen_scroll = 0
 bg_scroll = 0
+bg_tiling = 5
 game_over = False
 paused = False
 option_one = False
@@ -210,11 +211,11 @@ def draw_test(test_array):
 def draw_bg():
 	screen.fill(BG)
 	width = sky_img.get_width()
-	for x in range(4):
-		screen.blit(sky_img, ((x * width) - bg_scroll * 0.5, 0))
-		screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6, SCREEN_HEIGHT - mountain_img.get_height() - 300))
-		screen.blit(pine1_img, ((x * width) - bg_scroll * 0.7, SCREEN_HEIGHT - pine1_img.get_height() - 150))
-		screen.blit(pine2_img, ((x * width) - bg_scroll * 0.8, SCREEN_HEIGHT - pine2_img.get_height()))
+	for x in range(bg_tiling):
+		screen.blit(sky_img,      ((x * width) - bg_scroll * 0.5, 0))
+		screen.blit(mountain_img, ((x * width) - bg_scroll * 0.6,    SCREEN_HEIGHT - mountain_img.get_height() - 300))
+		screen.blit(pine1_img,    ((x * width) - bg_scroll * 0.7,    SCREEN_HEIGHT - pine1_img.get_height() - 150))
+		screen.blit(pine2_img,    ((x * width) - bg_scroll * 0.8,    SCREEN_HEIGHT - pine2_img.get_height()))
 
 sm.play_theme(sm.theme_dungeon1_array)
 
