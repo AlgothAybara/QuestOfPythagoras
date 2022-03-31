@@ -8,10 +8,8 @@ import csv
 import SoundManager as sm
 from characters.Ghost import Ghost
 from characters.Player import Player
-from characters.Monster import Monster
 
 pygame.init()
-
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
@@ -219,12 +217,15 @@ def draw_bg():
 
 sm.play_theme(sm.theme_dungeon1_array)
 
+# object containing data for the rendered tile map
 class World():
+    # arrays of each tile type
     def __init__(self):
         self.obstacle_list = []
         self.decoration_list = []
         self.water_list = []
 
+    # maps each number in the tilemap with a tile png
     def process_data(self, data):
         self.level_length = len(data[0])
         #iterate through each value in level data file
@@ -236,27 +237,29 @@ class World():
                     img_rect.x = x * TILE_SIZE
                     img_rect.y = y * TILE_SIZE
                     tile_data = (img, img_rect)
+                    # creates a dirt tile
                     if tile >= 0 and tile <= 8:
                         self.obstacle_list.append(tile_data)
+                    # creates a water tile
                     elif tile >= 9 and tile <= 10:
-                        water = Water(img, x * TILE_SIZE, y * TILE_SIZE)
-                        water_group.add(water)
                         self.water_list.append(tile_data)
+                    # craetes a decoration tile
                     elif tile >= 11 and tile <= 14:
-                        decoration = Decoration(img, x * TILE_SIZE, y * TILE_SIZE)
-                        decoration_group.add(decoration)
                         self.decoration_list.append(tile_data)
-                    elif tile == 15:#create player
+                    #create player
+                    elif tile == 15:
                         player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
-                    elif tile == 16:#create ghost
+                    #create ghost
+                    elif tile == 16:
                         enemy = Ghost("Ghost",x * TILE_SIZE, y * TILE_SIZE,100,1)
-                        # enemy = Ghost('enemy', x * TILE_SIZE, y * TILE_SIZE, 1.65, 2, 20, 0)
                         enemy_group.add(enemy)
+                    # creates monster/boss
                     elif tile == 20:
                         enemy = Ghost("Monster",x * TILE_SIZE, y * TILE_SIZE,120,1)
                         enemy_group.add(enemy)
         return player
 
+    # renders each tile.png at the location indicated in the tilemap
     def draw(self):
         for tile in self.obstacle_list:
             tile[1][0] += screen_scroll
@@ -268,30 +271,9 @@ class World():
             tile[1][0] += screen_scroll
             screen.blit(tile[0], tile[1])
 
+    # updates the tiles rendered in the screen when the viewport/camera moves
     def update(self):
         self.rect.x += screen_scroll
-
-class Decoration(pygame.sprite.Sprite):
-    def __init__(self, img, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
-    
-    def draw(self):
-        for tile in self.obstacle_list:
-            tile[1][0] += screen_scroll
-            screen.blit(tile[0], tile[1])
-
-    def update(self):
-        self.rect.x += screen_scroll
-
-class Water(pygame.sprite.Sprite):
-    def __init__(self, img, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
 #create sprite groups
 item_box_group = pygame.sprite.Group()
@@ -313,8 +295,6 @@ with open(f'Assets/Archived/level{level}_data.csv', newline='') as csvfile:
             world_data[x][y] = int(tile)
 world = World()
 player = world.process_data(world_data)
-
-
 
 run = True
 while run:

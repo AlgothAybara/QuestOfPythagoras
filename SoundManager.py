@@ -5,8 +5,6 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.set_volume(0.5)
 
-SONG_END = pygame.USEREVENT + 1
-
 # load sound effects
 attack_effect = pygame.mixer.Sound("assets/audio/effects/attack.wav")
 missed_effect = pygame.mixer.Sound("assets/audio/effects/missed.wav")
@@ -27,7 +25,7 @@ dungeon1_verse1 = "assets/audio/dungeon1/verse1.wav"
 dungeon1_verse2 = "assets/audio/dungeon1/verse2.wav"
 dungeon1_verse3 = "assets/audio/dungeon1/verse3.wav"
 
-
+# creates a dungeon theme array
 theme_dungeon1_array = [
     dungeon1_intro,
     dungeon1_bridge,
@@ -49,12 +47,13 @@ def play_effect(num):
     pygame.mixer.Sound.play(effect_array[num])
     #end play_effect function
 
+# plays the mixer.music object
 def play_theme(theme):
-    pygame.mixer.music.set_endevent(SONG_END)
     pygame.mixer.music.load(theme[0])
     pygame.mixer.music.queue(theme[1])
     pygame.mixer.music.play()
 
+# appneds random clip to the array
 def theme_queue(theme):
     index = random.randint(0,len(theme)-2)    
     pygame.mixer.music.queue(theme[index])
