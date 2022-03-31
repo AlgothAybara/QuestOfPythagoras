@@ -1,4 +1,5 @@
 # from matplotlib import animation
+import imp
 from matplotlib.pyplot import pause
 import pygame
 import os
@@ -7,6 +8,7 @@ import csv
 import SoundManager as sm
 from characters.Ghost import Ghost
 from characters.Player import Player
+from characters.Monster import Monster
 
 pygame.init()
 
