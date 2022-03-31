@@ -2,7 +2,7 @@
 
 This game was created using [Python 3](https://www.python.org/) and [Pygame](https://www.pygame.org/).
 
-Is a simple game where the player plays against the computer.
+Is a simple game where the player navigates a level and defeats monsters with math.
 
 The purpose of this project is show the basic concepts of Python language and Pygame library.
 
@@ -22,7 +22,8 @@ You can run the game using the following command:
 
 # Development Environment
 
-Python - [Python 3.7.3](https://www.python.org/downloads/)
+* Python - [Python 3.7.3](https://www.python.org/downloads/)
+* Visual Studio Code - [VSC](https://code.visualstudio.com/)
 
 # Useful Websites
 
@@ -31,4 +32,8 @@ Python - [Python 3.7.3](https://www.python.org/downloads/)
 
 # Future Work
 
-* Working on the game logic.
+* Add more levels
+* Create more UI elements
+* Add more MOBs
+* Increase combat complexity
+* Add a gender alt for the player sprite
