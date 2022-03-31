@@ -1,4 +1,5 @@
 # from matplotlib import animation
+import imp
 from matplotlib.pyplot import pause
 import pygame
 import os
@@ -7,6 +8,7 @@ import csv
 import SoundManager as sm
 from characters.Ghost import Ghost
 from characters.Player import Player
+from characters.Monster import Monster
 
 pygame.init()
 
@@ -212,6 +214,8 @@ sm.play_theme(sm.theme_dungeon1_array)
 class World():
     def __init__(self):
         self.obstacle_list = []
+        self.decoration_list = []
+        self.water_list = []
 
     def process_data(self, data):
         self.level_length = len(data[0])
@@ -229,9 +233,11 @@ class World():
                     elif tile >= 9 and tile <= 10:
                         water = Water(img, x * TILE_SIZE, y * TILE_SIZE)
                         water_group.add(water)
+                        self.water_list.append(tile_data)
                     elif tile >= 11 and tile <= 14:
                         decoration = Decoration(img, x * TILE_SIZE, y * TILE_SIZE)
                         decoration_group.add(decoration)
+                        self.decoration_list.append(tile_data)
                     elif tile == 15:#create player
                         player = Player("heroine",x * TILE_SIZE,y * TILE_SIZE,100,5)
                     elif tile == 16:#create ghost
@@ -241,23 +247,34 @@ class World():
                     elif tile == 20:
                         enemy = Ghost("Monster",x * TILE_SIZE, y * TILE_SIZE,120,1)
                         enemy_group.add(enemy)
-
-
         return player
-
 
     def draw(self):
         for tile in self.obstacle_list:
             tile[1][0] += screen_scroll
             screen.blit(tile[0], tile[1])
+        for tile in self.decoration_list:
+            tile[1][0] += screen_scroll
+            screen.blit(tile[0], tile[1])
+        for tile in self.water_list:
+            tile[1][0] += screen_scroll
+            screen.blit(tile[0], tile[1])
+
     def update(self):
         self.rect.x += screen_scroll
+
 class Decoration(pygame.sprite.Sprite):
     def __init__(self, img, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
+    
+    def draw(self):
+        for tile in self.obstacle_list:
+            tile[1][0] += screen_scroll
+            screen.blit(tile[0], tile[1])
+
     def update(self):
         self.rect.x += screen_scroll
 
@@ -268,15 +285,12 @@ class Water(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.midtop = (x + TILE_SIZE // 2, y + (TILE_SIZE - self.image.get_height()))
 
-
 #create sprite groups
 item_box_group = pygame.sprite.Group()
 decoration_group = pygame.sprite.Group()
 water_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 decoration_group.draw(screen)
-
-
 
 #create empty tile list
 world_data = []
